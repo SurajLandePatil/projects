@@ -1,0 +1,196 @@
+<div class="search-container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>Find Mechanics</span>
+    <span class="spacer"></span>
+    <mat-icon>search</mat-icon>
+  </mat-toolbar>
+
+  <div class="search-content">
+    <!-- Search and Filter Section -->
+    <div class="search-filters">
+      <mat-card class="filter-card">
+        <mat-card-content>
+          <div class="filter-row">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search mechanics</mat-label>
+              <input matInput [(ngModel)]="searchQuery" (input)="filterMechanics()" 
+                     placeholder="Search by name or shop">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="filter-field">
+              <mat-label>Specialization</mat-label>
+              <mat-select [(ngModel)]="selectedSpecialization" (selectionChange)="filterMechanics()">
+                <mat-option value="">All Services</mat-option>
+                <mat-option *ngFor="let spec of specializations" [value]="spec">
+                  {{spec}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Finding nearby mechanics...</p>
+    </div>
+
+    <!-- No Mechanics Found -->
+    <div *ngIf="!isLoading && filteredMechanics.length === 0 && mechanics.length === 0" class="no-mechanics">
+      <mat-icon>build_circle</mat-icon>
+      <h3>No Mechanics Found</h3>
+      <p>No mechanics are available in your area at the moment.</p>
+      <button mat-raised-button color="primary" (click)="loadNearestMechanics()">
+        <mat-icon>refresh</mat-icon>
+        Retry Search
+      </button>
+    </div>
+
+    <!-- No Results After Filter -->
+    <div *ngIf="!isLoading && filteredMechanics.length === 0 && mechanics.length > 0" class="no-results">
+      <mat-icon>filter_list_off</mat-icon>
+      <h3>No Results Found</h3>
+      <p>Try adjusting your search criteria</p>
+      <button mat-button color="primary" (click)="searchQuery = ''; selectedSpecialization = ''; filterMechanics()">
+        Clear Filters
+      </button>
+    </div>
+
+    <!-- Mechanics List -->
+    <div *ngIf="!isLoading && filteredMechanics.length > 0" class="mechanics-section">
+      <div class="results-header">
+        <h3>
+          <mat-icon>location_on</mat-icon>
+          {{filteredMechanics.length}} mechanic(s) found nearby
+        </h3>
+        <mat-chip-listbox>
+          <mat-chip class="info-chip">
+            <mat-icon>info</mat-icon>
+            Sorted by distance
+          </mat-chip>
+        </mat-chip-listbox>
+      </div>
+
+      <div class="mechanics-list">
+        <mat-card *ngFor="let mechanic of filteredMechanics; let i = index" 
+                 class="mechanic-card" 
+                 [class.featured]="i < 3">
+          <mat-card-header>
+            <div mat-card-avatar class="mechanic-avatar" [class.top-rated]="(mechanic.averageRating || 0) >= 4.5">
+              <mat-icon>{{mechanic.isAvailable ? 'build' : 'build_circle'}}</mat-icon>
+            </div>
+            <mat-card-title>{{mechanic.name}}</mat-card-title>
+            <mat-card-subtitle>{{mechanic.shopName}}</mat-card-subtitle>
+            
+            <div class="availability-badge" [class.available]="mechanic.isAvailable" [class.unavailable]="!mechanic.isAvailable">
+              <mat-icon>{{mechanic.isAvailable ? 'radio_button_checked' : 'radio_button_unchecked'}}</mat-icon>
+              <span>{{mechanic.isAvailable ? 'Available' : 'Busy'}}</span>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <div class="mechanic-info">
+              <div class="info-row">
+                <mat-icon>location_on</mat-icon>
+                <span>{{locationService.formatDistance(mechanic.distanceFromUser || 0)}} away</span>
+              </div>
+              
+              <div class="info-row">
+                <mat-icon>schedule</mat-icon>
+                <span>{{mechanic.experience}} experience</span>
+              </div>
+              
+              <div class="info-row">
+                <mat-icon>phone</mat-icon>
+                <span>{{mechanic.phone}}</span>
+              </div>
+              
+              <div class="info-row specializations">
+                <mat-icon>settings</mat-icon>
+                <div class="specs-list">
+                  <mat-chip-listbox>
+                    <mat-chip *ngFor="let spec of mechanic.specialization.split(',').slice(0, 3)" 
+                             class="spec-chip">
+                      {{spec.trim()}}
+                    </mat-chip>
+                    <mat-chip *ngIf="mechanic.specialization.split(',').length > 3" 
+                             class="more-chip">
+                      +{{mechanic.specialization.split(',').length - 3}} more
+                    </mat-chip>
+                  </mat-chip-listbox>
+                </div>
+              </div>
+              
+              <div class="rating-section">
+                <div class="stars-rating">
+                  <div class="stars">
+                    <mat-icon *ngFor="let star of getStarArray(mechanic.averageRating || 0)"
+                             [class.filled]="star" 
+                             [class.empty]="!star">
+                      {{star ? 'star' : 'star_border'}}
+                    </mat-icon>
+                  </div>
+                  <span class="rating-text">
+                    {{mechanic.averageRating || 'New'}}
+                    <span *ngIf="mechanic.totalReviews">({{mechanic.totalReviews}} reviews)</span>
+                  </span>
+                </div>
+                
+                <div class="quick-stats">
+                  <mat-chip class="stat-chip">
+                    <mat-icon>timer</mat-icon>
+                    ~{{calculateEstimatedTime(mechanic.distanceFromUser || 0)}}
+                  </mat-chip>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button 
+                    color="primary" 
+                    [disabled]="!mechanic.isAvailable"
+                    (click)="requestMechanic(mechanic)"
+                    class="request-btn">
+              <mat-icon>{{mechanic.isAvailable ? 'build' : 'schedule'}}</mat-icon>
+              <span>{{mechanic.isAvailable ? 'Request Service' : 'Not Available'}}</span>
+            </button>
+            
+            <button mat-button 
+                    color="accent" 
+                    (click)="viewMechanicDetails(mechanic)"
+                    class="details-btn">
+              <mat-icon>info</mat-icon>
+              <span>View Details</span>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="emergency-section">
+      <mat-card class="emergency-card">
+        <mat-card-content>
+          <div class="emergency-content">
+            <mat-icon class="emergency-icon">warning</mat-icon>
+            <div class="emergency-text">
+              <h4>Emergency Assistance</h4>
+              <p>Need immediate help? Contact emergency services</p>
+            </div>
+            <button mat-raised-button color="warn" class="emergency-btn">
+              <mat-icon>phone</mat-icon>
+              Call Now
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

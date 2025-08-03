@@ -1,0 +1,104 @@
+<div class="review-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Rate Your Experience</h2>
+    <button mat-icon-button mat-dialog-close class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <!-- Mechanic Info -->
+    <div class="mechanic-summary">
+      <div class="mechanic-avatar">
+        <mat-icon>build</mat-icon>
+      </div>
+      <div class="mechanic-details">
+        <h3>{{data.mechanic.name}}</h3>
+        <p>{{data.mechanic.shopName}}</p>
+        <div class="service-info">
+          <mat-icon>build</mat-icon>
+          <span>{{data.booking.vehicleType}} - {{data.booking.problemDescription}}</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Rating Form -->
+    <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+      <!-- Star Rating -->
+      <div class="rating-section">
+        <h4>How would you rate this service?</h4>
+        <div class="star-rating">
+          <button type="button" 
+                  class="star-btn" 
+                  *ngFor="let star of [1,2,3,4,5]; let i = index"
+                  [class]="getStarColor(i + 1)"
+                  (click)="setRating(i + 1)"
+                  (mouseenter)="onMouseEnter(i + 1)"
+                  (mouseleave)="onMouseLeave()">
+            <mat-icon>{{getStarIcon(i + 1)}}</mat-icon>
+          </button>
+        </div>
+        <div class="rating-label" [class.selected]="selectedRating > 0">
+          {{getRatingText()}}
+        </div>
+        <mat-error *ngIf="reviewForm.get('rating')?.hasError('required') && reviewForm.get('rating')?.touched">
+          Please select a rating
+        </mat-error>
+      </div>
+
+      <!-- Comment Section -->
+      <div class="comment-section">
+        <h4>Share your experience (optional)</h4>
+        <mat-form-field appearance="outline" class="comment-field">
+          <mat-label>Write your review</mat-label>
+          <textarea matInput 
+                   formControlName="comment"
+                   placeholder="Tell others about your experience with this mechanic..."
+                   rows="4"
+                   maxlength="500"></textarea>
+          <mat-hint align="end">{{reviewForm.value.comment?.length || 0}}/500</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Quick Rating Options -->
+      <div class="quick-ratings" *ngIf="selectedRating > 0">
+        <h4>What made this experience {{getRatingText().toLowerCase()}}?</h4>
+        <div class="quick-options">
+          <mat-chip-listbox [multiple]="true">
+            <mat-chip *ngIf="selectedRating >= 4" selectable>Professional service</mat-chip>
+            <mat-chip *ngIf="selectedRating >= 4" selectable>Quick response</mat-chip>
+            <mat-chip *ngIf="selectedRating >= 4" selectable>Fair pricing</mat-chip>
+            <mat-chip *ngIf="selectedRating >= 4" selectable>Quality work</mat-chip>
+            <mat-chip *ngIf="selectedRating >= 4" selectable>Friendly behavior</mat-chip>
+            
+            <mat-chip *ngIf="selectedRating <= 3" selectable>Slow response</mat-chip>
+            <mat-chip *ngIf="selectedRating <= 3" selectable>Poor communication</mat-chip>
+            <mat-chip *ngIf="selectedRating <= 3" selectable>Overpriced</mat-chip>
+            <mat-chip *ngIf="selectedRating <= 2" selectable>Unprofessional</mat-chip>
+            <mat-chip *ngIf="selectedRating <= 2" selectable>Poor quality</mat-chip>
+          </mat-chip-listbox>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button 
+            type="button" 
+            (click)="onCancel()"
+            [disabled]="isSubmitting">
+      Cancel
+    </button>
+    <button mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="selectedRating === 0 || isSubmitting"
+            (click)="onSubmit()">
+      <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+      <span *ngIf="!isSubmitting">Submit Review</span>
+      <span *ngIf="isSubmitting">Submitting...</span>
+    </button>
+  </mat-dialog-actions>
+</div>

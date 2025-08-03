@@ -1,0 +1,98 @@
+<div class="admin-dashboard">
+  <mat-toolbar color="primary">
+    <span>Admin Dashboard</span>
+    <span class="spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="adminMenu">
+      <mat-icon>admin_panel_settings</mat-icon>
+    </button>
+    <mat-menu #adminMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div class="dashboard-content">
+    <div class="stats-section" *ngIf="!isLoading">
+      <div class="stats-grid">
+        <mat-card class="stat-card users" (click)="navigateToUserList()"
+  style="cursor: pointer;">
+  <mat-card-content>
+    <div class="stat-content">
+      <mat-icon>people</mat-icon>
+      <div class="stat-info">
+        <h2>{{dashboardStats.totalUsers || 0}}</h2>
+        <p>Total Users</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+        <mat-card class="stat-card mechanics">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>build</mat-icon>
+              <div class="stat-info">
+                <h2>{{dashboardStats.totalMechanics || 0}}</h2>
+                <p>Total Mechanics</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card bookings">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>assignment</mat-icon>
+              <div class="stat-info">
+                <h2>{{dashboardStats.totalBookings || 0}}</h2>
+                <p>Total Bookings</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card reports">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon>report_problem</mat-icon>
+              <div class="stat-info">
+                <h2>{{dashboardStats.totalReports || 0}}</h2>
+                <p>Total Reports</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <div class="actions-grid">
+        <mat-card class="action-card" (click)="navigateToMechanicApproval()">
+          <mat-card-content>
+            <mat-icon>how_to_reg</mat-icon>
+            <h3>Mechanic Approval</h3>
+            <p>{{dashboardStats.pendingMechanics || 0}} pending approvals</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="action-card" (click)="navigateToReportManagement()">
+          <mat-card-content>
+            <mat-icon>flag</mat-icon>
+            <h3>Report Management</h3>
+            <p>{{dashboardStats.pendingReports || 0}} pending reports</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<button class="btn btn-primary" [routerLink]="'/admin/report-management'">
+  Go to Report Management
+</button>

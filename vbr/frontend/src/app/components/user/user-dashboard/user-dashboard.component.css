@@ -1,0 +1,165 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mat-toolbar {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.dashboard-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Emergency Card */
+.welcome-card {
+  background: #f1f5ff;
+  border-left: 5px solid #637bfd;
+}
+
+.emergency-action {
+  text-align: center;
+}
+
+.emergency-button {
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 240px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Booking List */
+.recent-bookings-section mat-card {
+  padding-bottom: 8px;
+}
+
+.booking-list-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+
+.booking-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.booking-status-chip {
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #fff;
+  background-color: grey;
+}
+
+.booking-status-chip[status='PENDING'] {
+  background-color: #ff9800;
+}
+.booking-status-chip[status='ACCEPTED'] {
+  background-color: #2196f3;
+}
+.booking-status-chip[status='IN_PROGRESS'] {
+  background-color: #9c27b0;
+}
+.booking-status-chip[status='COMPLETED'] {
+  background-color: #4caf50;
+}
+.booking-status-chip[status='REJECTED'],
+.booking-status-chip[status='CANCELLED'] {
+  background-color: #f44336;
+}
+
+.booking-date {
+  font-size: 13px;
+  color: #888;
+  margin-left: 28px;
+}
+
+.booking-rejected-message {
+  display: flex;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #e53935;
+  margin-left: 28px;
+  gap: 4px;
+}
+
+/* Quick Actions */
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .stats-grid {
+    flex-direction: column;
+  }
+
+  .booking-list-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .booking-status-chip {
+    align-self: flex-end;
+  }
+}

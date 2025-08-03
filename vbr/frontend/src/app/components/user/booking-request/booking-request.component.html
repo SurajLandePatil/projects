@@ -1,0 +1,77 @@
+<div class="booking-container">
+  <mat-card class="booking-card">
+    <mat-card-header>
+      <mat-card-title>Request Breakdown Assistance</mat-card-title>
+      <mat-card-subtitle>Fill in the details to request help</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="selectedMechanic" class="mechanic-info">
+        <h3>Selected Mechanic</h3>
+        <mat-card class="mechanic-card">
+          <mat-card-content>
+            <div class="mechanic-details">
+              <div class="mechanic-main">
+                <h4>{{selectedMechanic.name}}</h4>
+                <p><strong>Shop:</strong> {{selectedMechanic.shopName}}</p>
+                <p><strong>Experience:</strong> {{selectedMechanic.experience}}</p>
+                <p><strong>Specialization:</strong> {{selectedMechanic.specialization}}</p>
+              </div>
+              <div class="mechanic-rating">
+                <div class="stars">
+                  <mat-icon *ngFor="let star of getStarArray(selectedMechanic.averageRating || 0)"
+                           [class.filled]="star">star</mat-icon>
+                </div>
+                <span class="rating-text">{{selectedMechanic.averageRating || 0}} ({{selectedMechanic.totalReviews || 0}} reviews)</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Vehicle Type</mat-label>
+          <mat-select formControlName="vehicleType">
+            <mat-option *ngFor="let type of vehicleTypes" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="bookingForm.get('vehicleType')?.hasError('required')">
+            Please select your vehicle type
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Problem Description</mat-label>
+          <textarea matInput formControlName="problemDescription" 
+                   placeholder="Describe your vehicle problem in detail..." 
+                   rows="4"></textarea>
+          <mat-error *ngIf="bookingForm.get('problemDescription')?.hasError('required')">
+            Problem description is required
+          </mat-error>
+          <mat-error *ngIf="bookingForm.get('problemDescription')?.hasError('minlength')">
+            Please provide at least 10 characters description
+          </mat-error>
+        </mat-form-field>
+
+        <div class="location-info" *ngIf="currentLocation">
+          <mat-icon>location_on</mat-icon>
+          <span>Your current location will be shared with the mechanic</span>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="goBack()" [disabled]="isSubmitting">
+            Back
+          </button>
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="!bookingForm.valid || isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+            <span *ngIf="!isSubmitting">Send Request</span>
+            <span *ngIf="isSubmitting">Sending...</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

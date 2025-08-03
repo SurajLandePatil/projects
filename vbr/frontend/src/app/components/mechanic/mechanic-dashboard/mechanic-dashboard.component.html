@@ -1,0 +1,145 @@
+<div class="dashboard-container">
+  <mat-toolbar color="primary">
+    <span>Mechanic Dashboard</span>
+    <span class="spacer"></span>
+    <mat-slide-toggle [(ngModel)]="isAvailable" (change)="toggleAvailability()" 
+                     [color]="'accent'">
+      {{isAvailable ? 'Available' : 'Unavailable'}}
+    </mat-slide-toggle>
+    <span class="spacer"></span>
+    <span>{{currentMechanic?.name}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="mechanicMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #mechanicMenu="matMenu">
+      <button mat-menu-item routerLink="/mechanic/profile">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div class="dashboard-content">
+    <div class="status-section">
+      <mat-card [class]="isAvailable ? 'status-available' : 'status-unavailable'">
+        <mat-card-content>
+          <div class="status-content">
+            <mat-icon>{{isAvailable ? 'check_circle' : 'cancel'}}</mat-icon>
+            <div>
+              <h2>{{isAvailable ? 'You are available' : 'You are unavailable'}}</h2>
+              <p>{{isAvailable ? 'Ready to receive booking requests' : 'Not accepting new requests'}}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="stats-section">
+      <div class="stats-grid">
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="warn">schedule</mat-icon>
+              <div class="stat-info">
+                <h3>{{pendingBookings.length}}</h3>
+                <p>Pending Requests</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="primary">history</mat-icon>
+              <div class="stat-info">
+                <h3>{{recentBookings.length}}</h3>
+                <p>Total Bookings</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="accent">star</mat-icon>
+              <div class="stat-info">
+                <h3>{{currentMechanic?.averageRating || 0}}</h3>
+                <p>Average Rating</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="pending-requests-section" *ngIf="pendingBookings.length > 0">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Pending Requests</mat-card-title>
+          <mat-card-subtitle>{{pendingBookings.length}} request(s) awaiting response</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="booking-list">
+            <mat-card *ngFor="let booking of pendingBookings" class="booking-card">
+              <mat-card-content>
+                <div class="booking-info">
+                  <div class="booking-details">
+                    <h4>{{booking.vehicleType}} Breakdown</h4>
+                    <p><strong>Problem:</strong> {{booking.problemDescription}}</p>
+                    <p><strong>Time:</strong> {{booking.createdAt | date:'short'}}</p>
+                  </div>
+                  <div class="booking-actions">
+                    <button mat-raised-button color="primary" (click)="acceptBooking(booking.id)">
+                      Accept
+                    </button>
+                    <button mat-stroked-button color="warn" (click)="rejectBooking(booking.id)">
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="recent-bookings-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Recent Bookings</mat-card-title>
+          <div class="spacer"></div>
+          <button mat-button color="primary" routerLink="/mechanic/bookings">View All</button>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="isLoading" class="loading-container">
+            <mat-spinner></mat-spinner>
+          </div>
+          
+          <div *ngIf="!isLoading && recentBookings.length === 0" class="no-bookings">
+            <mat-icon>history</mat-icon>
+            <p>No bookings yet</p>
+          </div>
+
+          <mat-list *ngIf="!isLoading && recentBookings.length > 0">
+            <mat-list-item *ngFor="let booking of recentBookings">
+              <mat-icon matListItemIcon>build</mat-icon>
+              <div matListItemTitle>{{booking.vehicleType}} - {{booking.problemDescription}}</div>
+              <div matListItemLine>{{booking.createdAt | date:'short'}}</div>
+              <mat-chip [style.background-color]="getStatusColor(booking.status)" 
+                       [style.color]="'white'" matListItemMeta>
+                {{booking.status}}
+              </mat-chip>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

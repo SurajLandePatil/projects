@@ -1,0 +1,324 @@
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.map-container {
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+  z-index: 1;
+}
+
+.map-controls {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.location-btn {
+  background-color: white;
+  color: #667eea;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.location-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.map-legend {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 15px;
+  z-index: 1000;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.legend-marker {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-marker mat-icon {
+  font-size: 14px;
+  height: 14px;
+  width: 14px;
+  color: white;
+}
+
+.legend-marker.user-marker {
+  background-color: #2196f3;
+}
+
+.legend-marker.mechanic-marker {
+  background-color: #ff9800;
+}
+
+.legend-marker.selected-marker {
+  background-color: #4caf50;
+}
+
+/* Custom marker styles for Leaflet */
+::ng-deep .current-location-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+::ng-deep .current-location-marker {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+::ng-deep .location-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background-color: #2196f3;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+::ng-deep .location-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid #2196f3;
+  border-radius: 50%;
+  opacity: 0;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+::ng-deep .user-marker-icon,
+::ng-deep .mechanic-marker-icon,
+::ng-deep .selected-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+::ng-deep .user-marker {
+  width: 30px;
+  height: 30px;
+  background-color: #2196f3;
+  border: 3px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(33, 150, 243, 0.4);
+  color: white;
+}
+
+::ng-deep .mechanic-marker {
+  width: 30px;
+  height: 30px;
+  background-color: #ff9800;
+  border: 3px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(255, 152, 0, 0.4);
+  color: white;
+}
+
+::ng-deep .selected-marker {
+  width: 35px;
+  height: 35px;
+  background-color: #4caf50;
+  border: 3px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 15px rgba(76, 175, 80, 0.6);
+  color: white;
+  animation: selected-bounce 1s ease-in-out;
+}
+
+@keyframes selected-bounce {
+  0%, 20%, 60%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  80% {
+    transform: translateY(-5px);
+  }
+}
+
+::ng-deep .custom-popup {
+  font-family: 'Roboto', sans-serif;
+  border-radius: 8px;
+  padding: 0;
+  min-width: 150px;
+}
+
+::ng-deep .custom-popup h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+::ng-deep .custom-popup p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+::ng-deep .current-location h4 {
+  color: #2196f3;
+}
+
+::ng-deep .mechanic-popup h4 {
+  color: #ff9800;
+}
+
+::ng-deep .selected-popup h4 {
+  color: #4caf50;
+}
+
+::ng-deep .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+::ng-deep .leaflet-popup-tip {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Routing styles */
+::ng-deep .leaflet-routing-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .leaflet-routing-alt {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 4px 0;
+  background: rgba(102, 126, 234, 0.1);
+  border-left: 3px solid #667eea;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .map-controls {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .map-legend {
+    bottom: 10px;
+    left: 10px;
+    padding: 10px 12px;
+    flex-direction: column;
+    gap: 8px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .legend-item {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-wrapper {
+    border-radius: 8px;
+  }
+  
+  .map-controls {
+    top: 8px;
+    right: 8px;
+  }
+  
+  .location-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .map-legend {
+    bottom: 8px;
+    left: 8px;
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .legend-marker {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .legend-marker mat-icon {
+    font-size: 12px;
+    height: 12px;
+    width: 12px;
+  }
+}
+
+/* Loading state */
+.map-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}

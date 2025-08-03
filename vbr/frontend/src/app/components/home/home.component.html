@@ -1,0 +1,73 @@
+<div class="home-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>Vehicle Breakdown Assistance</h1>
+      <p>Get instant help when your vehicle breaks down. Connect with nearby mechanics in minutes!</p>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="features-section">
+      <div class="container">
+        <h2>How It Works</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <mat-icon>location_on</mat-icon>
+            <h3>Find Nearby Mechanics</h3>
+            <p>Locate mechanics near your breakdown location instantly</p>
+          </div>
+          <div class="feature-card">
+            <mat-icon>build</mat-icon>
+            <h3>Quick Response</h3>
+            <p>Get help within minutes from verified mechanics</p>
+          </div>
+          <div class="feature-card">
+            <mat-icon>star_rate</mat-icon>
+            <h3>Trusted Service</h3>
+            <p>All mechanics are verified and rated by users</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-section">
+      <div class="container">
+        <h2>Get Started</h2>
+        <div class="login-options">
+          <mat-card class="login-card" (click)="navigateToUserLogin()">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>person</mat-icon>
+              <mat-card-title>I need help</mat-card-title>
+              <mat-card-subtitle>Book a mechanic for assistance</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-raised-button color="primary">User Login</button>
+            </mat-card-actions>
+          </mat-card>
+
+          <mat-card class="login-card" (click)="navigateToMechanicLogin()">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>build</mat-icon>
+              <mat-card-title>I'm a mechanic</mat-card-title>
+              <mat-card-subtitle>Provide assistance to users</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-raised-button color="accent">Mechanic Login</button>
+            </mat-card-actions>
+          </mat-card>
+
+          <mat-card class="login-card" (click)="navigateToAdminLogin()">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>admin_panel_settings</mat-icon>
+              <mat-card-title>Admin Panel</mat-card-title>
+              <mat-card-subtitle>Manage the platform</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-raised-button color="warn">Admin Login</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

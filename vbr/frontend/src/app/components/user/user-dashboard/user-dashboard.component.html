@@ -1,0 +1,140 @@
+<div class="dashboard-container">
+  <mat-toolbar color="primary">
+    <span>Vehicle Breakdown Assistance</span>
+    <span class="spacer"></span>
+    <span>Welcome, {{currentUser?.name}}</span>
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div class="dashboard-content">
+    <div class="welcome-section">
+      <mat-card class="welcome-card">
+        <mat-card-content>
+          <div class="emergency-action">
+            <h2>Need Emergency Assistance?</h2>
+            <p>Find nearby mechanics instantly</p>
+            <button mat-raised-button color="accent" size="large" 
+                    (click)="requestBreakdownAssistance()" class="emergency-button">
+              <mat-icon>build</mat-icon>
+              Request Assistance Now
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="stats-section">
+      <div class="stats-grid">
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="primary">history</mat-icon>
+              <div class="stat-info">
+                <h3>{{recentBookings.length}}</h3>
+                <p>Recent Bookings</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="accent">check_circle</mat-icon>
+              <div class="stat-info">
+                <h3>{{getCompletedBookingsCount()}}</h3>
+                <p>Completed Services</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon color="warn">schedule</mat-icon>
+              <div class="stat-info">
+                <h3>{{getPendingBookingsCount()}}</h3>
+                <p>Active Requests</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="recent-bookings-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Recent Bookings</mat-card-title>
+          <div class="spacer"></div>
+          <button mat-button color="primary" (click)="viewAllBookings()">View All</button>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="isLoadingBookings" class="loading-container">
+            <mat-spinner></mat-spinner>
+          </div>
+          
+          <div *ngIf="!isLoadingBookings && recentBookings.length === 0" class="no-bookings">
+            <mat-icon>history</mat-icon>
+            <p>No bookings yet</p>
+            <button mat-raised-button color="primary" (click)="requestBreakdownAssistance()">
+              Make Your First Booking
+            </button>
+          </div>
+
+          <mat-list *ngIf="!isLoadingBookings && recentBookings.length > 0">
+            <mat-list-item *ngFor="let booking of recentBookings">
+              <mat-icon matListItemIcon>build</mat-icon>
+              <div matListItemTitle>{{booking.vehicleType}} - {{booking.problemDescription}}</div>
+              <div matListItemLine>{{booking.createdAt | date:'short'}}</div>
+              <mat-chip [style.background-color]="getStatusColor(booking.status)" 
+                       [style.color]="'white'" matListItemMeta>
+                {{booking.status}}
+              </mat-chip>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="quick-actions-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Quick Actions</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="actions-grid">
+            <button mat-stroked-button (click)="requestBreakdownAssistance()" class="action-button">
+              <mat-icon>search</mat-icon>
+              <span>Find Mechanics</span>
+            </button>
+            
+            <button mat-stroked-button (click)="viewAllBookings()" class="action-button">
+              <mat-icon>history</mat-icon>
+              <span>My Bookings</span>
+            </button>
+            
+            <button mat-stroked-button routerLink="/user/profile" class="action-button">
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
+            </button>
+            
+            <button mat-stroked-button routerLink="/user/help" class="action-button">
+              <mat-icon>help</mat-icon>
+              <span>Help & Support</span>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <div class="footer-brand">
+        <mat-icon class="brand-icon">build</mat-icon>
+        <h3>Vehicle Breakdown Assistance</h3>
+        <p>Your reliable partner for vehicle emergencies. Connect with trusted mechanics instantly.</p>
+      </div>
+    </div>
+
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul class="footer-links">
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/user/login">User Login</a></li>
+        <li><a routerLink="/mechanic/login">Mechanic Login</a></li>
+        <li><a routerLink="/admin/login">Admin Panel</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Services</h4>
+      <ul class="footer-links">
+        <li><a href="#">Car Repair</a></li>
+        <li><a href="#">Bike Maintenance</a></li>
+        <li><a href="#">Emergency Assistance</a></li>
+        <li><a href="#">Roadside Help</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact Info</h4>
+      <div class="contact-info">
+        <div class="contact-item">
+          <mat-icon>phone</mat-icon>
+          <span>+1-800-BREAKDOWN</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <span>support@vehiclebreakdown.com</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>Available 24/7 Nationwide</span>
+        </div>
+      </div>
+      
+      <div class="social-links">
+        <button mat-icon-button class="social-btn facebook">
+          <mat-icon>facebook</mat-icon>
+        </button>
+        <button mat-icon-button class="social-btn twitter">
+          <mat-icon>twitter</mat-icon>
+        </button>
+        <button mat-icon-button class="social-btn instagram">
+          <mat-icon>instagram</mat-icon>
+        </button>
+        <button mat-icon-button class="social-btn linkedin">
+          <mat-icon>linkedin</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-content">
+      <div class="copyright">
+        <p>&copy; {{currentYear}} Vehicle Breakdown Assistance. All rights reserved.</p>
+      </div>
+      <div class="footer-bottom-links">
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="#" class="footer-link">Help Center</a>
+      </div>
+      <button mat-mini-fab color="primary" class="scroll-top-btn" (click)="scrollToTop()" 
+              matTooltip="Back to top">
+        <mat-icon>keyboard_arrow_up</mat-icon>
+      </button>
+    </div>
+  </div>
+</footer>

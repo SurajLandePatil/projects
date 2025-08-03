@@ -1,0 +1,157 @@
+<mat-toolbar class="app-header" [class.scrolled]="isMenuOpen">
+  <div class="header-container">
+    <!-- Logo/Brand -->
+    <div class="brand" (click)="navigateHome()">
+      <mat-icon class="brand-icon">build</mat-icon>
+      <span class="brand-text">VBA</span>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav" *ngIf="!isLoggedIn()">
+      <button mat-button class="nav-btn" (click)="navigateToUserLogin()">
+        <mat-icon>person</mat-icon>
+        <span>User</span>
+      </button>
+      <button mat-button class="nav-btn" (click)="navigateToMechanicLogin()">
+        <mat-icon>build</mat-icon>
+        <span>Mechanic</span>
+      </button>
+      <button mat-button class="nav-btn" (click)="navigateToAdminLogin()">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Admin</span>
+      </button>
+    </nav>
+
+    <!-- Logged In User Info -->
+    <div class="user-info" *ngIf="isLoggedIn()">
+      <div class="user-details">
+        <span class="user-name">{{getCurrentUserName()}}</span>
+        <span class="user-type">{{getUserTypeLabel()}}</span>
+      </div>
+      
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <mat-icon>{{getUserTypeIcon()}}</mat-icon>
+      </button>
+      
+      <mat-menu #userMenu="matMenu" class="user-menu">
+        <div class="menu-header">
+          <mat-icon>{{getUserTypeIcon()}}</mat-icon>
+          <div>
+            <div class="menu-user-name">{{getCurrentUserName()}}</div>
+            <div class="menu-user-type">{{getUserTypeLabel()}}</div>
+          </div>
+        </div>
+        
+        <mat-divider></mat-divider>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'user'" (click)="navigateToUserDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'mechanic'" (click)="navigateToMechanicDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'admin'" (click)="navigateToAdminDashboard()">
+          <mat-icon>dashboard</mat-icon>
+          <span>Admin Panel</span>
+        </button>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'user'">
+          <mat-icon>person</mat-icon>
+          <span>Profile</span>
+        </button>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'mechanic'">
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        
+        <button mat-menu-item *ngIf="currentUserType === 'user'">
+          <mat-icon>history</mat-icon>
+          <span>My Bookings</span>
+        </button>
+        
+        <mat-divider></mat-divider>
+        
+        <button mat-menu-item (click)="logout()" class="logout-btn">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button mat-icon-button class="mobile-menu-btn" (click)="toggleMenu()">
+      <mat-icon>{{isMenuOpen ? 'close' : 'menu'}}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMenuOpen" (click)="closeMenu()">
+    <div class="mobile-menu-content" (click)="$event.stopPropagation()">
+      <div class="mobile-menu-header">
+        <mat-icon class="brand-icon">build</mat-icon>
+        <h2>Vehicle Breakdown Assistance</h2>
+      </div>
+
+      <div class="mobile-menu-body">
+        <div *ngIf="!isLoggedIn()" class="mobile-nav-section">
+          <h3>Login As</h3>
+          <button mat-stroked-button class="mobile-nav-btn" (click)="navigateToUserLogin()">
+            <mat-icon>person</mat-icon>
+            <span>User</span>
+          </button>
+          <button mat-stroked-button class="mobile-nav-btn" (click)="navigateToMechanicLogin()">
+            <mat-icon>build</mat-icon>
+            <span>Mechanic</span>
+          </button>
+          <button mat-stroked-button class="mobile-nav-btn" (click)="navigateToAdminLogin()">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Admin</span>
+          </button>
+        </div>
+
+        <div *ngIf="isLoggedIn()" class="mobile-user-section">
+          <div class="mobile-user-info">
+            <mat-icon class="mobile-user-icon">{{getUserTypeIcon()}}</mat-icon>
+            <div>
+              <div class="mobile-user-name">{{getCurrentUserName()}}</div>
+              <div class="mobile-user-type">{{getUserTypeLabel()}}</div>
+            </div>
+          </div>
+          
+          <div class="mobile-user-actions">
+            <button mat-button class="mobile-action-btn" 
+                    *ngIf="currentUserType === 'user'" 
+                    (click)="navigateToUserDashboard()">
+              <mat-icon>dashboard</mat-icon>
+              <span>Dashboard</span>
+            </button>
+            
+            <button mat-button class="mobile-action-btn" 
+                    *ngIf="currentUserType === 'mechanic'" 
+                    (click)="navigateToMechanicDashboard()">
+              <mat-icon>dashboard</mat-icon>
+              <span>Dashboard</span>
+            </button>
+            
+            <button mat-button class="mobile-action-btn" 
+                    *ngIf="currentUserType === 'admin'" 
+                    (click)="navigateToAdminDashboard()">
+              <mat-icon>dashboard</mat-icon>
+              <span>Admin Panel</span>
+            </button>
+            
+            <button mat-button class="mobile-action-btn logout" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>

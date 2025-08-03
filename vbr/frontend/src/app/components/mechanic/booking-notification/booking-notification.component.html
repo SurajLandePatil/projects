@@ -1,0 +1,104 @@
+<div class="notification-container">
+  <div class="notification-header">
+    <h2>
+      <mat-icon>notifications</mat-icon>
+      Notifications
+      <mat-chip *ngIf="getUnreadCount() > 0" class="unread-count">{{getUnreadCount()}}</mat-chip>
+    </h2>
+    <button mat-icon-button (click)="clearAllNotifications()" 
+            [disabled]="notifications.length === 0"
+            matTooltip="Clear all notifications">
+      <mat-icon>clear_all</mat-icon>
+    </button>
+  </div>
+
+  <div class="pending-bookings-section" *ngIf="pendingBookings.length > 0">
+    <h3>
+      <mat-icon color="warn">schedule</mat-icon>
+      Pending Booking Requests ({{pendingBookings.length}})
+    </h3>
+    
+    <div class="booking-requests">
+      <mat-card *ngFor="let booking of pendingBookings" class="booking-request-card urgent">
+        <mat-card-content>
+          <div class="booking-header">
+            <div class="booking-info">
+              <h4>{{booking.vehicleType}} Breakdown</h4>
+              <p class="problem">{{booking.problemDescription}}</p>
+              <div class="booking-meta">
+                <span class="time">
+                  <mat-icon>schedule</mat-icon>
+                  {{booking.createdAt | date:'short'}}
+                </span>
+                <span class="user">
+                  <mat-icon>person</mat-icon>
+                  User ID: {{booking.userId}}
+                </span>
+              </div>
+            </div>
+            <div class="urgency-indicator">
+              <mat-icon class="pulse">priority_high</mat-icon>
+            </div>
+          </div>
+          
+          <div class="booking-actions">
+            <button mat-raised-button color="primary" (click)="acceptBooking(booking.id)">
+              <mat-icon>check</mat-icon>
+              Accept (1 min left)
+            </button>
+            <button mat-stroked-button color="warn" (click)="rejectBooking(booking.id)">
+              <mat-icon>close</mat-icon>
+              Reject
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="notifications-section">
+    <h3>
+      <mat-icon>history</mat-icon>
+      Recent Notifications
+    </h3>
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && notifications.length === 0" class="no-notifications">
+      <mat-icon>notifications_none</mat-icon>
+      <p>No notifications yet</p>
+      <small>You'll receive notifications for booking requests and updates</small>
+    </div>
+
+    <div *ngIf="!isLoading && notifications.length > 0" class="notifications-list">
+      <mat-card *ngFor="let notification of notifications" 
+               [class]="'notification-card ' + (notification.read ? 'read' : 'unread')"
+               (click)="markNotificationAsRead(notification)">
+        <mat-card-content>
+          <div class="notification-content">
+            <div class="notification-icon">
+              <mat-icon [style.color]="getNotificationColor(notification.type)">
+                {{getNotificationIcon(notification.type)}}
+              </mat-icon>
+            </div>
+            <div class="notification-details">
+              <h4>{{notification.message}}</h4>
+              <p *ngIf="notification.bookingData">
+                {{notification.bookingData.vehicleType}} - {{notification.bookingData.problemDescription}}
+              </p>
+              <small class="notification-time">
+                <mat-icon>schedule</mat-icon>
+                {{notification.timestamp | date:'short'}}
+              </small>
+            </div>
+            <div class="notification-status" *ngIf="!notification.read">
+              <mat-chip color="primary" selected>New</mat-chip>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

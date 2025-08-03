@@ -1,0 +1,199 @@
+<div class="registration-container">
+  <mat-card class="registration-card">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar">
+        <mat-icon>build</mat-icon>
+      </div>
+      <mat-card-title>Mechanic Registration</mat-card-title>
+      <mat-card-subtitle>Join our network of trusted mechanics</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="approval-notice">
+        <mat-icon>info</mat-icon>
+        <p>After registration, your profile will be reviewed by admin. You can login only after approval.</p>
+      </div>
+
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3>Personal Information</h3>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter your full name">
+            <mat-error *ngIf="registrationForm.get('name')?.hasError('required')">
+              Name is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('name')?.hasError('minlength')">
+              Name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" placeholder="Enter your email">
+            <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">
+              Please enter a valid email
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
+              Password must be at least 6 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone" placeholder="+1234567890">
+            <mat-error *ngIf="registrationForm.get('phone')?.hasError('required')">
+              Phone number is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('phone')?.hasError('pattern')">
+              Please enter a valid phone number
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3>Shop Information</h3>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Shop Name</mat-label>
+            <input matInput formControlName="shopName" placeholder="Enter your shop name">
+            <mat-error *ngIf="registrationForm.get('shopName')?.hasError('required')">
+              Shop name is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('shopName')?.hasError('minlength')">
+              Shop name must be at least 3 characters
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Shop Address</mat-label>
+            <textarea matInput formControlName="shopAddress" 
+                     placeholder="Enter complete shop address" 
+                     rows="3"></textarea>
+            <mat-error *ngIf="registrationForm.get('shopAddress')?.hasError('required')">
+              Shop address is required
+            </mat-error>
+            <mat-error *ngIf="registrationForm.get('shopAddress')?.hasError('minlength')">
+              Please provide a detailed address
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-section">
+          <h3>Professional Details</h3>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Experience</mat-label>
+            <mat-select formControlName="experience">
+              <mat-option *ngFor="let exp of experienceOptions" [value]="exp">
+                {{exp}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="registrationForm.get('experience')?.hasError('required')">
+              Please select your experience level
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Specializations</mat-label>
+            <mat-select formControlName="specialization" multiple>
+              <mat-option *ngFor="let spec of specializations" [value]="spec">
+                {{spec}}
+              </mat-option>
+            </mat-select>
+            <mat-hint>Select all services you provide</mat-hint>
+            <mat-error *ngIf="registrationForm.get('specialization')?.hasError('required')">
+              Please select at least one specialization
+            </mat-error>
+          </mat-form-field>
+
+          <div class="selected-specializations" 
+               *ngIf="registrationForm.get('specialization')?.value?.length > 0">
+            <p>Selected specializations:</p>
+            <mat-chip-listbox>
+              <mat-chip *ngFor="let spec of registrationForm.get('specialization')?.value">
+                {{spec}}
+              </mat-chip>
+            </mat-chip-listbox>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Location</h3>
+          
+          <div class="location-section">
+            <button mat-stroked-button type="button" (click)="getCurrentLocation()" 
+                    [disabled]="gettingLocation" class="location-button">
+              <mat-spinner *ngIf="gettingLocation" diameter="20"></mat-spinner>
+              <mat-icon *ngIf="!gettingLocation">my_location</mat-icon>
+              <span>{{gettingLocation ? 'Getting Location...' : 'Use Current Location'}}</span>
+            </button>
+            
+            <p class="location-note">
+              <mat-icon>info</mat-icon>
+              Location helps users find you easily. You can also enter coordinates manually.
+            </p>
+          </div>
+
+          <div class="coordinates-row">
+            <mat-form-field appearance="outline" class="coordinate-field">
+              <mat-label>Latitude</mat-label>
+              <input matInput formControlName="latitude" placeholder="28.6139" type="number" step="any">
+              <mat-error *ngIf="registrationForm.get('latitude')?.hasError('required')">
+                Latitude is required
+              </mat-error>
+              <mat-error *ngIf="registrationForm.get('latitude')?.hasError('min') || registrationForm.get('latitude')?.hasError('max')">
+                Invalid latitude value
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="coordinate-field">
+              <mat-label>Longitude</mat-label>
+              <input matInput formControlName="longitude" placeholder="77.2090" type="number" step="any">
+              <mat-error *ngIf="registrationForm.get('longitude')?.hasError('required')">
+                Longitude is required
+              </mat-error>
+              <mat-error *ngIf="registrationForm.get('longitude')?.hasError('min') || registrationForm.get('longitude')?.hasError('max')">
+                Invalid longitude value
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button mat-raised-button color="accent" type="submit" 
+                  [disabled]="!registrationForm.valid || isLoading" class="full-width">
+            <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+            <span *ngIf="!isLoading">Register as Mechanic</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="card-actions">
+        <button mat-button color="accent" (click)="goToLogin()" class="full-width">
+          Already have an account? Login here
+        </button>
+        <button mat-button (click)="goHome()" class="full-width">
+          Back to Home
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

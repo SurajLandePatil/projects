@@ -1,0 +1,47 @@
+.user-toolbar {
+  margin-bottom: 24px;
+}
+
+.user-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.user-card {
+  width: 320px;
+  box-shadow: 0 4px 16px rgba(60, 60, 150, 0.05), 0 1.5px 6px rgba(60, 60, 150, 0.11);
+  border-radius: 14px;
+  transition: box-shadow 0.25s;
+  background: #f8fafd;
+}
+
+.user-card:hover {
+  box-shadow: 0 6px 24px rgba(60, 60, 150, 0.17), 0 3px 12px rgba(60, 60, 150, 0.21);
+}
+
+.user-avatar {
+  background: linear-gradient(135deg, #5c6bc0 40%, #42a5f5 100%);
+  color: white;
+}
+
+.user-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 15px;
+}
+
+mat-card-title {
+  font-weight: bold;
+  font-size: 20px;
+  color: #303256;
+}
+
+mat-card-subtitle {
+  color: #7882a6;
+  font-size: 15px;
+}

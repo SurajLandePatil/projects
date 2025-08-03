@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Mechanic Details</h1>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-list-item>
+      <strong>Name:</strong> {{data.name}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Email:</strong> {{data.email}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Shop Name:</strong> {{data.shopName}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Address:</strong> {{data.shopAddress}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Phone:</strong> {{data.phone}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Experience:</strong> {{data.experience}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Specialization:</strong> {{data.specialization}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Available:</strong> {{data.isAvailable ? 'Yes' : 'No'}}
+    </mat-list-item>
+    <mat-list-item>
+      <strong>Applied:</strong> {{data.createdAt | date:'medium'}}
+    </mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="dialogRef.close()">Close</button>
+</div>

@@ -1,0 +1,149 @@
+<div class="approval-container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button routerLink="/admin/dashboard">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>Mechanic Approval Management</span>
+  </mat-toolbar>
+
+  <div class="approval-content">
+    <mat-tab-group [(selectedIndex)]="selectedTab">
+      <mat-tab label="Pending Approvals ({{pendingMechanics.length}})">
+        <div class="tab-content">
+          <div *ngIf="isLoading" class="loading-container">
+            <mat-spinner></mat-spinner>
+            <p>Loading pending mechanics...</p>
+          </div>
+
+          <div *ngIf="!isLoading && pendingMechanics.length === 0" class="no-data">
+            <mat-icon>check_circle_outline</mat-icon>
+            <h3>No Pending Approvals</h3>
+            <p>All mechanics have been processed.</p>
+          </div>
+
+          <div *ngIf="!isLoading && pendingMechanics.length > 0" class="mechanics-grid">
+            <mat-card *ngFor="let mechanic of pendingMechanics" class="mechanic-card pending">
+              <mat-card-header>
+                <div mat-card-avatar class="mechanic-avatar">
+                  <mat-icon>build</mat-icon>
+                </div>
+                <mat-card-title>{{mechanic.name}}</mat-card-title>
+                <mat-card-subtitle>{{mechanic.shopName}}</mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="mechanic-info">
+                  <div class="info-row">
+                    <mat-icon>email</mat-icon>
+                    <span>{{mechanic.email}}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>phone</mat-icon>
+                    <span>{{mechanic.phone}}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>location_on</mat-icon>
+                    <span>{{mechanic.shopAddress}}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>work</mat-icon>
+                    <span>{{mechanic.experience}} experience</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>settings</mat-icon>
+                    <div class="specializations">
+                      <mat-chip-listbox>
+                        <mat-chip *ngFor="let spec of formatSpecializations(mechanic.specialization)">
+                          {{spec}}
+                        </mat-chip>
+                      </mat-chip-listbox>
+                    </div>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Applied: {{mechanic.createdAt | date:'medium'}}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+
+              <mat-card-actions>
+                <button mat-raised-button color="primary" (click)="approveMechanic(mechanic.id)">
+                  <mat-icon>check</mat-icon>
+                  Approve
+                </button>
+                <button mat-stroked-button color="warn" (click)="rejectMechanic(mechanic.id)">
+                  <mat-icon>close</mat-icon>
+                  Reject
+                </button>
+                <button mat-button (click)="viewMechanicDetails(mechanic)">
+                  <mat-icon>info</mat-icon>
+                  Details
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Approved Mechanics ({{approvedMechanics.length}})">
+        <div class="tab-content">
+          <div *ngIf="approvedMechanics.length === 0" class="no-data">
+            <mat-icon>people_outline</mat-icon>
+            <h3>No Approved Mechanics</h3>
+            <p>No mechanics have been approved yet.</p>
+          </div>
+
+          <div *ngIf="approvedMechanics.length > 0" class="mechanics-grid">
+            <mat-card *ngFor="let mechanic of approvedMechanics" class="mechanic-card approved">
+              <mat-card-header>
+                <div mat-card-avatar class="mechanic-avatar approved">
+                  <mat-icon>verified</mat-icon>
+                </div>
+                <mat-card-title>{{mechanic.name}}</mat-card-title>
+                <mat-card-subtitle>{{mechanic.shopName}}</mat-card-subtitle>
+                <div class="status-badge approved">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Approved</span>
+                </div>
+              </mat-card-header>
+
+              <mat-card-content>
+                <div class="mechanic-info">
+                  <div class="info-row">
+                    <mat-icon>email</mat-icon>
+                    <span>{{mechanic.email}}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>location_on</mat-icon>
+                    <span>{{mechanic.shopAddress}}</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>work</mat-icon>
+                    <span>{{mechanic.experience}} experience</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon>star</mat-icon>
+                    <span>Rating: {{mechanic.averageRating || 'N/A'}} ({{mechanic.totalReviews || 0}} reviews)</span>
+                  </div>
+                  <div class="info-row">
+                    <mat-icon [class]="mechanic.isAvailable ? 'available' : 'unavailable'">
+                      {{mechanic.isAvailable ? 'radio_button_checked' : 'radio_button_unchecked'}}
+                    </mat-icon>
+                    <span>{{mechanic.isAvailable ? 'Available' : 'Unavailable'}}</span>
+                  </div>
+                </div>
+              </mat-card-content>
+
+              <mat-card-actions>
+                <button mat-button (click)="viewMechanicDetails(mechanic)">
+                  <mat-icon>info</mat-icon>
+                  View Details
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

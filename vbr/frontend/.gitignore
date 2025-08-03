@@ -1,0 +1,40 @@
+# Angular build and development artifacts
+/dist
+/tmp
+/out-tsc
+/.angular
+
+# Node dependencies
+/node_modules
+
+# Compiled files
+*.js
+*.js.map
+
+# Logs
+*.log
+
+# Environment files (optional if you don’t want to expose API keys)
+src/environments/*.ts
+!src/environments/environment.prod.ts
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# NPM logs and lockfiles (optional)
+/package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports
+/coverage
+
+# Optional: Firebase or cloud-specific
+.firebaserc
+.firebase/
